@@ -9,12 +9,11 @@ export const metadata: Metadata = {
   description: 'View detailed information about this property listing.',
 };
 
-type Props = {
+export default async function PropertyPage({
+  params,
+}: {
   params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-export default async function PropertyPage({ params }: Props) {
+}) {
   try {
     const { db } = await connectToDatabase();
     const propertyId = params.id;
