@@ -9,22 +9,24 @@ export const metadata: Metadata = {
   description: 'View detailed information about this property listing.',
 };
 
-export default async function PropertyPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function Page({ params }: Props) {
   try {
     const { db } = await connectToDatabase();
-    const propertyId = params.id;
+    const { id } = params;
 
-    if (!ObjectId.isValid(propertyId)) {
+    if (!ObjectId.isValid(id)) {
       notFound();
     }
 
     const property = await db
       .collection('properties')
-      .findOne({ _id: new ObjectId(propertyId) });
+      .findOne({ _id: new ObjectId(id) });
 
     if (!property) {
       notFound();
