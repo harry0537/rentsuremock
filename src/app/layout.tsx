@@ -4,11 +4,11 @@ import dynamic from 'next/dynamic'
 import { Toaster } from 'react-hot-toast'
 
 // Dynamically import client components
-const Navbar = dynamic(() => import('@/components/Navbar'))
-const Footer = dynamic(() => import('@/components/Footer'))
-const AuthProvider = dynamic(() => import('@/context/AuthContext').then(mod => mod.AuthProvider))
-const PropertyProvider = dynamic(() => import('@/context/PropertyContext').then(mod => mod.PropertyProvider))
-const MaintenanceProvider = dynamic(() => import('@/context/MaintenanceContext').then(mod => mod.MaintenanceProvider))
+const Navbar = dynamic(() => import('@/components/Navbar'), { ssr: true })
+const Footer = dynamic(() => import('@/components/Footer'), { ssr: true })
+const AuthProvider = dynamic(() => import('@/context/AuthContext').then(mod => mod.AuthProvider), { ssr: true })
+const PropertyProvider = dynamic(() => import('@/context/PropertyContext').then(mod => mod.PropertyProvider), { ssr: true })
+const MaintenanceProvider = dynamic(() => import('@/context/MaintenanceContext').then(mod => mod.MaintenanceProvider), { ssr: true })
 
 const inter = Inter({ subsets: ['latin'] })
 
