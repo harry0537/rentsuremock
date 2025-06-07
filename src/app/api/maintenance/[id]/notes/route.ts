@@ -5,19 +5,13 @@ import { ObjectId } from 'mongodb';
 // Mock data for demonstration
 const mockNotes: MaintenanceNote[] = [];
 
-type RouteSegmentProps = {
-  params: {
-    id: string;
-  };
-};
-
 export async function GET(
   request: NextRequest,
-  context: RouteSegmentProps
+  { params }: { params: { id: string } }
 ) {
   try {
     const { db } = await connectToDatabase();
-    const maintenanceId = context.params.id;
+    const maintenanceId = params.id;
 
     // Validate ObjectId
     if (!ObjectId.isValid(maintenanceId)) {
@@ -45,11 +39,11 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  context: RouteSegmentProps
+  { params }: { params: { id: string } }
 ) {
   try {
     const { db } = await connectToDatabase();
-    const maintenanceId = context.params.id;
+    const maintenanceId = params.id;
     const { content, userId, userRole } = await request.json();
 
     // Validate ObjectId
