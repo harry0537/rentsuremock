@@ -32,4 +32,4 @@ export async function connectToDatabase() {
   const client = await clientPromise;
   const db = client.db(process.env.MONGODB_DB);
   return { client, db };
-} 
+}
