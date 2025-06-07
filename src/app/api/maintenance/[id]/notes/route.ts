@@ -15,8 +15,8 @@ export async function GET(
 
     // Validate ObjectId
     if (!ObjectId.isValid(maintenanceId)) {
-      return NextResponse.json(
-        { error: 'Invalid maintenance request ID' },
+      return new Response(
+        JSON.stringify({ error: 'Invalid maintenance request ID' }),
         { status: 400 }
       );
     }
@@ -27,11 +27,11 @@ export async function GET(
       .sort({ createdAt: -1 })
       .toArray();
 
-    return NextResponse.json(notes);
+    return new Response(JSON.stringify(notes));
   } catch (error) {
     console.error('Error fetching maintenance notes:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch maintenance notes' },
+    return new Response(
+      JSON.stringify({ error: 'Failed to fetch maintenance notes' }),
       { status: 500 }
     );
   }
@@ -48,16 +48,16 @@ export async function POST(
 
     // Validate ObjectId
     if (!ObjectId.isValid(maintenanceId)) {
-      return NextResponse.json(
-        { error: 'Invalid maintenance request ID' },
+      return new Response(
+        JSON.stringify({ error: 'Invalid maintenance request ID' }),
         { status: 400 }
       );
     }
 
     // Validate required fields
     if (!content || !userId || !userRole) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
+      return new Response(
+        JSON.stringify({ error: 'Missing required fields' }),
         { status: 400 }
       );
     }
@@ -72,14 +72,16 @@ export async function POST(
 
     const result = await db.collection('maintenance_notes').insertOne(note);
 
-    return NextResponse.json({
-      ...note,
-      _id: result.insertedId,
-    });
+    return new Response(
+      JSON.stringify({
+        ...note,
+        _id: result.insertedId,
+      })
+    );
   } catch (error) {
     console.error('Error adding maintenance note:', error);
-    return NextResponse.json(
-      { error: 'Failed to add maintenance note' },
+    return new Response(
+      JSON.stringify({ error: 'Failed to add maintenance note' }),
       { status: 500 }
     );
   }
