@@ -1,19 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-// Mock data for demonstration
-const mockNotes: MaintenanceNote[] = [];
+// Types (optional, but recommended for future scalability)
+interface MaintenanceNote {
+  maintenanceId: ObjectId;
+  content: string;
+  userId: ObjectId;
+  userRole: string;
+  createdAt: Date;
+}
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const { db } = await connectToDatabase();
-    const maintenanceId = params.id;
+    const maintenanceId = context.params.id;
 
-    // Validate ObjectId
     if (!ObjectId.isValid(maintenanceId)) {
       return new Response(
         JSON.stringify({ error: 'Invalid maintenance request ID' }),
@@ -27,7 +32,10 @@ export async function GET(
       .sort({ createdAt: -1 })
       .toArray();
 
-    return new Response(JSON.stringify(notes));
+    return new Response(JSON.stringify(notes), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('Error fetching maintenance notes:', error);
     return new Response(
@@ -39,14 +47,13 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const { db } = await connectToDatabase();
-    const maintenanceId = params.id;
+    const maintenanceId = context.params.id;
     const { content, userId, userRole } = await request.json();
 
-    // Validate ObjectId
     if (!ObjectId.isValid(maintenanceId)) {
       return new Response(
         JSON.stringify({ error: 'Invalid maintenance request ID' }),
@@ -54,7 +61,6 @@ export async function POST(
       );
     }
 
-    // Validate required fields
     if (!content || !userId || !userRole) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
@@ -76,7 +82,11 @@ export async function POST(
       JSON.stringify({
         ...note,
         _id: result.insertedId,
-      })
+      }),
+      {
+        status: 201,
+        headers: { 'Content-Type': 'application/json' },
+      }
     );
   } catch (error) {
     console.error('Error adding maintenance note:', error);
@@ -85,4 +95,4 @@ export async function POST(
       { status: 500 }
     );
   }
-} 
+}
