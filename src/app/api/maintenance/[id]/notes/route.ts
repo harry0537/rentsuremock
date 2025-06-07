@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
@@ -6,12 +6,12 @@ import { ObjectId } from 'mongodb';
 const mockNotes: MaintenanceNote[] = [];
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: { id: string } }
 ) {
   try {
     const { db } = await connectToDatabase();
-    const maintenanceId = params.id;
+    const maintenanceId = context.params.id;
 
     // Validate ObjectId
     if (!ObjectId.isValid(maintenanceId)) {
@@ -38,12 +38,12 @@ export async function GET(
 }
 
 export async function POST(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: { id: string } }
 ) {
   try {
     const { db } = await connectToDatabase();
-    const maintenanceId = params.id;
+    const maintenanceId = context.params.id;
     const { content, userId, userRole } = await request.json();
 
     // Validate ObjectId
