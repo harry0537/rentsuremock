@@ -1,85 +1,124 @@
-# RentSure - Cloud-Based Residential Rental App
+# RentSure - Smart Property Management Platform
 
-RentSure is a modern web application for managing residential rentals, built with Next.js, React, and Tailwind CSS.
+RentSure is a modern, cloud-based property management platform that streamlines the rental process for landlords and tenants. Built with Next.js, TypeScript, and Tailwind CSS, it offers a seamless experience for managing properties, maintenance requests, and tenant communications.
 
-## Features
+## 🌟 Key Features
 
-- User authentication (landlord and tenant portals)
-- Property listing and management
-- Maintenance request system
-- Payment processing
-- Document management
-- Communication system
-- Analytics dashboard
+### For Landlords
+- **Property Management Dashboard**
+  - Overview of all properties
+  - Maintenance request tracking
+  - Financial analytics
+  - Tenant communication hub
 
-## Prerequisites
+- **Maintenance Management**
+  - Real-time maintenance request tracking
+  - Calendar view for scheduling
+  - Cost tracking and budgeting
+  - Vendor management
 
-- Node.js 18.x or later
-- npm or yarn package manager
+- **Tenant Portal**
+  - Secure document storage
+  - Maintenance request submission
+  - Payment tracking
+  - Communication tools
 
-## Getting Started
+### For Tenants
+- **Easy Maintenance Requests**
+  - Photo upload capability
+  - Real-time status updates
+  - Communication with landlords
+  - Maintenance history
+
+- **Document Management**
+  - Lease agreements
+  - Maintenance records
+  - Payment history
+  - Important notices
+
+## 🚀 Technology Stack
+
+- **Frontend**: Next.js 14, React, TypeScript
+- **Styling**: Tailwind CSS, Headless UI
+- **Authentication**: NextAuth.js
+- **Database**: MongoDB
+- **File Storage**: Cloudinary
+- **Email Service**: SendGrid
+- **Deployment**: Vercel
+
+## 🛠️ Getting Started
 
 1. Clone the repository:
-```bash
-git clone <repository-url>
-cd rentsure
-```
+   ```bash
+   git clone https://github.com/harry0537/rentsuremock.git
+   cd rentsure
+   ```
 
 2. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-```
+   ```bash
+   npm install
+   ```
 
-3. Run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
+3. Set up environment variables:
+   Create a `.env.local` file with:
+   ```
+   MONGODB_URI=your_mongodb_uri
+   NEXTAUTH_SECRET=your_nextauth_secret
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+   CLOUDINARY_API_KEY=your_cloudinary_key
+   CLOUDINARY_API_SECRET=your_cloudinary_secret
+   SENDGRID_API_KEY=your_sendgrid_key
+   ```
 
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-## Project Structure
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-```
-rentsure/
-├── src/
-│   ├── app/              # Next.js app directory
-│   ├── components/       # Reusable components
-│   ├── styles/          # Global styles
-│   └── types/           # TypeScript type definitions
-├── public/              # Static assets
-└── ...config files
-```
+## 📱 Demo Access
 
-## Tech Stack
+For demo purposes, you can use these test accounts:
 
-- **Frontend Framework**: Next.js 14
-- **UI Library**: React 18
-- **Styling**: Tailwind CSS
-- **Icons**: Heroicons
-- **UI Components**: Headless UI
-- **Form Handling**: React Hook Form
-- **Notifications**: React Hot Toast
-- **Language**: TypeScript
+**Landlord Account:**
+- Email: demo@rentsure.com
+- Password: Demo@123
 
-## Development
+**Tenant Account:**
+- Email: tenant@rentsure.com
+- Password: Demo@123
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+## 🔒 Security Features
 
-## Contributing
+- End-to-end encryption for sensitive data
+- Role-based access control
+- Secure file storage
+- Regular security audits
+- GDPR compliance
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## 📈 Business Model
 
-## License
+RentSure operates on a subscription-based model:
+- Basic Plan: $29/month per property
+- Professional Plan: $49/month per property
+- Enterprise Plan: Custom pricing
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+## 🎯 Future Roadmap
+
+- Mobile applications (iOS & Android)
+- AI-powered maintenance prediction
+- Blockchain-based lease agreements
+- Integration with smart home devices
+- Advanced analytics dashboard
+
+## 🤝 Contact
+
+For business inquiries or demo requests:
+- Email: contact@rentsure.com
+- Website: https://rentsure.com
+- LinkedIn: [RentSure](https://linkedin.com/company/rentsure)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
