@@ -1,0 +1,7 @@
+C:\Users\hazzs\OneDrive\Documents\Visual Studio 2022\labs\LAB3\obj\Debug\LAB3.csproj.AssemblyReference.cache
+C:\Users\hazzs\OneDrive\Documents\Visual Studio 2022\labs\LAB3\obj\Debug\LAB3.csproj.CoreCompileInputs.cache
+C:\Users\hazzs\OneDrive\Documents\Visual Studio 2022\labs\LAB3\bin\Debug\LAB3.exe.config
+C:\Users\hazzs\OneDrive\Documents\Visual Studio 2022\labs\LAB3\bin\Debug\LAB3.exe
+C:\Users\hazzs\OneDrive\Documents\Visual Studio 2022\labs\LAB3\bin\Debug\LAB3.pdb
+C:\Users\hazzs\OneDrive\Documents\Visual Studio 2022\labs\LAB3\obj\Debug\LAB3.exe
+C:\Users\hazzs\OneDrive\Documents\Visual Studio 2022\labs\LAB3\obj\Debug\LAB3.pdb
