@@ -2,27 +2,15 @@ import { NextRequest } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-// Types (optional, but recommended for future scalability)
-interface MaintenanceNote {
-  maintenanceId: ObjectId;
-  content: string;
-  userId: ObjectId;
-  userRole: string;
-  createdAt: Date;
-}
-
-export async function GET(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, context: any) {
   try {
+    const maintenanceId = context?.params?.id;
     const { db } = await connectToDatabase();
-    const maintenanceId = context.params.id;
 
     if (!ObjectId.isValid(maintenanceId)) {
       return new Response(
         JSON.stringify({ error: 'Invalid maintenance request ID' }),
-        { status: 400 }
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
@@ -36,35 +24,32 @@ export async function GET(
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
-    console.error('Error fetching maintenance notes:', error);
+  } catch (err) {
+    console.error('GET error:', err);
     return new Response(
       JSON.stringify({ error: 'Failed to fetch maintenance notes' }),
-      { status: 500 }
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, context: any) {
   try {
+    const maintenanceId = context?.params?.id;
     const { db } = await connectToDatabase();
-    const maintenanceId = context.params.id;
     const { content, userId, userRole } = await request.json();
 
     if (!ObjectId.isValid(maintenanceId)) {
       return new Response(
         JSON.stringify({ error: 'Invalid maintenance request ID' }),
-        { status: 400 }
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
     if (!content || !userId || !userRole) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
-        { status: 400 }
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
@@ -79,20 +64,14 @@ export async function POST(
     const result = await db.collection('maintenance_notes').insertOne(note);
 
     return new Response(
-      JSON.stringify({
-        ...note,
-        _id: result.insertedId,
-      }),
-      {
-        status: 201,
-        headers: { 'Content-Type': 'application/json' },
-      }
+      JSON.stringify({ ...note, _id: result.insertedId }),
+      { status: 201, headers: { 'Content-Type': 'application/json' } }
     );
-  } catch (error) {
-    console.error('Error adding maintenance note:', error);
+  } catch (err) {
+    console.error('POST error:', err);
     return new Response(
       JSON.stringify({ error: 'Failed to add maintenance note' }),
-      { status: 500 }
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
 }
