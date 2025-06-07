@@ -1,26 +1,23 @@
 export interface Property {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   price: number;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-  };
-  features: {
-    bedrooms: number;
-    bathrooms: number;
-    squareFeet: number;
-    parking: boolean;
-    petsAllowed: boolean;
-  };
+  location: string;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
   images: string[];
-  status: 'available' | 'rented' | 'maintenance';
-  landlordId: string;
-  createdAt: string;
-  updatedAt: string;
+  verified: boolean;
+  landlord: {
+    name: string;
+    verified: boolean;
+    rating: number;
+    reviews: number;
+  };
+  amenities: string[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface PropertyFilters {
