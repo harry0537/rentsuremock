@@ -5,6 +5,7 @@ import { useMaintenance } from '@/context/MaintenanceContext';
 import { MaintenanceCategory, MaintenanceTag } from '@/types/maintenance';
 import MaintenanceCategorySelect from './MaintenanceCategorySelect';
 import MaintenanceTagInput from './MaintenanceTagInput';
+import { toast } from 'react-hot-toast';
 
 interface MaintenanceRequestFormProps {
   propertyId: string;
@@ -23,7 +24,7 @@ export default function MaintenanceRequestForm({
   const [priority, setPriority] = useState<'low' | 'medium' | 'high' | 'emergency'>('medium');
   const [category, setCategory] = useState<MaintenanceCategory>('other');
   const [tags, setTags] = useState<MaintenanceTag[]>([]);
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,9 +34,6 @@ export default function MaintenanceRequestForm({
     setIsSubmitting(true);
 
     try {
-      // TODO: Implement image upload to Cloudinary
-      const imageUrls: string[] = [];
-
       await createRequest({
         propertyId,
         title,
@@ -43,7 +41,7 @@ export default function MaintenanceRequestForm({
         priority,
         category,
         tags,
-        images: imageUrls,
+        images,
         tenantId: '', // This will be set by the backend based on the authenticated user
         status: 'pending',
       });
@@ -57,9 +55,25 @@ export default function MaintenanceRequestForm({
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImages(Array.from(e.target.files));
+  const handleImageUpload = async (file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      const data = await response.json();
+      setImages(prev => [...prev, data.url]);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image');
     }
   };
 
@@ -150,7 +164,12 @@ export default function MaintenanceRequestForm({
           id="images"
           multiple
           accept="image/*"
-          onChange={handleImageChange}
+          onChange={(e) => {
+            if (e.target.files) {
+              const files = Array.from(e.target.files);
+              files.forEach(handleImageUpload);
+            }
+          }}
           className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
         />
       </div>

@@ -1,12 +1,15 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import dynamic from 'next/dynamic'
 import { Toaster } from 'react-hot-toast'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { AuthProvider } from '@/context/AuthContext'
-import { PropertyProvider } from '@/context/PropertyContext'
-import { MaintenanceProvider } from '@/context/MaintenanceContext'
+
+// Dynamically import client components
+const Navbar = dynamic(() => import('@/components/Navbar'), { ssr: false })
+const Footer = dynamic(() => import('@/components/Footer'), { ssr: false })
+const AuthProvider = dynamic(() => import('@/context/AuthContext').then(mod => mod.AuthProvider), { ssr: false })
+const PropertyProvider = dynamic(() => import('@/context/PropertyContext').then(mod => mod.PropertyProvider), { ssr: false })
+const MaintenanceProvider = dynamic(() => import('@/context/MaintenanceContext').then(mod => mod.MaintenanceProvider), { ssr: false })
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <AuthProvider>
           <PropertyProvider>
             <MaintenanceProvider>
@@ -32,6 +35,7 @@ export default function RootLayout({
                   {children}
                 </main>
                 <Footer />
+                <Toaster position="bottom-right" />
               </div>
             </MaintenanceProvider>
           </PropertyProvider>
