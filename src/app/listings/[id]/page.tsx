@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: 'View detailed information about this property listing.',
 };
 
+// ✅ Fresh local Props type
 type Props = {
   params: {
     id: string;
@@ -18,9 +19,24 @@ type Props = {
 export default async function Page({ params }: Props) {
   const { id } = params;
 
-  return (
-    <div>
-      <h1>Listing ID: {id}</h1>
-    </div>
-  );
+  try {
+    const { db } = await connectToDatabase();
+
+    if (!ObjectId.isValid(id)) {
+      notFound();
+    }
+
+    const property = await db
+      .collection('properties')
+      .findOne({ _id: new ObjectId(id) });
+
+    if (!property) {
+      notFound();
+    }
+
+    return <PropertyDetails property={property} />;
+  } catch (error) {
+    console.error('Error fetching property:', error);
+    notFound();
+  }
 } 
