@@ -2,9 +2,6 @@
 const nextConfig = {
   images: {
     domains: ['res.cloudinary.com'],
-  },
-  compiler: {
-    minify: true
   }
 }
 
