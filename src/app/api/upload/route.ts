@@ -1,23 +1,11 @@
 import { NextResponse } from 'next/server';
-import { uploadImage } from '@/lib/imageUpload';
 
 export async function POST(request: Request) {
   try {
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
-    
-    if (!file) {
-      return NextResponse.json(
-        { error: 'No file provided' },
-        { status: 400 }
-      );
-    }
-
-    const url = await uploadImage(file);
-    
+    // Mock successful upload response
     return NextResponse.json({
       success: true,
-      url,
+      url: 'https://placehold.co/600x400',
       message: 'Image upload simulated successfully'
     });
   } catch (error) {
