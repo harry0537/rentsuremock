@@ -5,15 +5,9 @@ import { ObjectId } from 'mongodb';
 // Mock data for demonstration
 const mockNotes: MaintenanceNote[] = [];
 
-type RouteContext = {
-  params: {
-    id: string;
-  };
-};
-
 export async function GET(
   request: NextRequest,
-  { params }: RouteContext
+  { params }: { params: { id: string } }
 ) {
   try {
     const { db } = await connectToDatabase();
@@ -45,7 +39,7 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: RouteContext
+  { params }: { params: { id: string } }
 ) {
   try {
     const { db } = await connectToDatabase();
