@@ -6,7 +6,7 @@ import { ObjectId } from 'mongodb';
 const mockNotes: MaintenanceNote[] = [];
 
 export async function GET(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -38,13 +38,13 @@ export async function GET(
 }
 
 export async function POST(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const { db } = await connectToDatabase();
     const maintenanceId = params.id;
-    const { content, userId, userRole } = await req.json();
+    const { content, userId, userRole } = await request.json();
 
     // Validate ObjectId
     if (!ObjectId.isValid(maintenanceId)) {
