@@ -14,4 +14,4 @@ export default async function Page(
 ) {
   const { id } = params;
   return <div className="p-4">Listing ID: {id}</div>;
-}
+} 
