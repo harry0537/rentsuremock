@@ -4,17 +4,19 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import PropertyDetails from '@/components/properties/PropertyDetails';
 
-// Metadata for the page
-export const metadata: Metadata = {
-  title: 'Property Details | Rentsure',
-  description: 'View detailed information about this property.',
-};
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
 
-export default async function Page({
-  params,
-}: {
-  params: { id: string };
-}) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  return {
+    title: 'Property Details | Rentsure',
+    description: 'View detailed information about this property.',
+  };
+}
+
+export default async function Page({ params }: Props) {
   const { id } = params;
 
   // Validate and fetch property data
