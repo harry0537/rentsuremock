@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
-import MaintenanceForm from '@/components/MaintenanceForm';
+import MaintenanceRequestForm from '@/components/MaintenanceRequestForm';
 
 export const metadata: Metadata = {
   title: 'New Maintenance Request | Rentsure',
@@ -27,7 +27,7 @@ export default async function Page({ params }) {
       notFound();
     }
 
-    return <MaintenanceForm propertyId={id} />;
+    return <MaintenanceRequestForm propertyId={id} />;
   } catch (error) {
     console.error('Error fetching property:', error);
     notFound();
