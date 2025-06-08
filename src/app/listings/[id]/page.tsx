@@ -9,7 +9,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page(
+  { params }: { params: { id: string } }
+) {
   const { id } = params;
   return <div className="p-4">Listing ID: {id}</div>;
 }
