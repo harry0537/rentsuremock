@@ -1,79 +1,57 @@
 import { NextResponse } from 'next/server';
+import { connectToDatabase } from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 import { Property } from '@/types/property';
 
-// Mock data for demonstration
-const mockProperties: Property[] = [
+// Sample data for development
+const sampleProperties: Omit<Property, 'id'>[] = [
   {
-    id: '1',
     title: 'Modern Downtown Apartment',
-    description: 'Beautiful modern apartment in the heart of downtown',
+    description: 'Beautiful 2-bedroom apartment in the heart of downtown',
+    address: '123 Main St, City, State 12345',
     price: 2000,
-    address: {
-      street: '123 Main St',
-      city: 'New York',
-      state: 'NY',
-      zipCode: '10001',
-    },
-    features: {
-      bedrooms: 2,
-      bathrooms: 2,
-      squareFeet: 1200,
-      parking: true,
-      petsAllowed: true,
-    },
-    images: ['/images/property1.jpg'],
+    bedrooms: 2,
+    bathrooms: 2,
+    area: 1200,
+    images: [
+      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688',
+    ],
+    amenities: ['Parking', 'Gym', 'Pool'],
     status: 'available',
     landlordId: '1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    title: 'Luxury Penthouse',
+    description: 'Stunning penthouse with city views',
+    address: '456 High St, City, State 12345',
+    price: 5000,
+    bedrooms: 3,
+    bathrooms: 3.5,
+    area: 2500,
+    images: [
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c',
+    ],
+    amenities: ['Parking', 'Gym', 'Pool', 'Concierge'],
+    status: 'available',
+    landlordId: '1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const filters = {
-      minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
-      maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
-      bedrooms: searchParams.get('bedrooms') ? Number(searchParams.get('bedrooms')) : undefined,
-      bathrooms: searchParams.get('bathrooms') ? Number(searchParams.get('bathrooms')) : undefined,
-      petsAllowed: searchParams.get('petsAllowed') === 'true',
-      city: searchParams.get('city') || undefined,
-      state: searchParams.get('state') || undefined,
-    };
-
-    // Filter properties based on search params
-    let filteredProperties = [...mockProperties];
-    if (filters.minPrice) {
-      filteredProperties = filteredProperties.filter(p => p.price >= filters.minPrice!);
-    }
-    if (filters.maxPrice) {
-      filteredProperties = filteredProperties.filter(p => p.price <= filters.maxPrice!);
-    }
-    if (filters.bedrooms) {
-      filteredProperties = filteredProperties.filter(p => p.features.bedrooms >= filters.bedrooms!);
-    }
-    if (filters.bathrooms) {
-      filteredProperties = filteredProperties.filter(p => p.features.bathrooms >= filters.bathrooms!);
-    }
-    if (filters.petsAllowed !== undefined) {
-      filteredProperties = filteredProperties.filter(p => p.features.petsAllowed === filters.petsAllowed);
-    }
-    if (filters.city) {
-      filteredProperties = filteredProperties.filter(p => 
-        p.address.city.toLowerCase().includes(filters.city!.toLowerCase())
-      );
-    }
-    if (filters.state) {
-      filteredProperties = filteredProperties.filter(p => 
-        p.address.state.toLowerCase().includes(filters.state!.toLowerCase())
-      );
-    }
-
-    return NextResponse.json(filteredProperties);
+    const { db } = await connectToDatabase();
+    const properties = await db.collection('properties').find({}).toArray();
+    return NextResponse.json(properties);
   } catch (error) {
+    console.error('Error fetching properties:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to fetch properties' },
       { status: 500 }
     );
   }
@@ -81,21 +59,18 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const { db } = await connectToDatabase();
     const property = await request.json();
-    
-    // TODO: Add validation and actual database storage
-    const newProperty: Property = {
+    const result = await db.collection('properties').insertOne({
       ...property,
-      id: Math.random().toString(36).substr(2, 9),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    mockProperties.push(newProperty);
-    return NextResponse.json(newProperty);
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    return NextResponse.json(result);
   } catch (error) {
+    console.error('Error creating property:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to create property' },
       { status: 500 }
     );
   }
