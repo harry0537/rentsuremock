@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { connectToDatabase } from '@/lib/mongodb';
@@ -5,23 +6,24 @@ import { ObjectId } from 'mongodb';
 import PropertyDetails from '@/components/properties/PropertyDetails';
 
 // ✅ Fix: Correct type for dynamic route page
-type Props = {
+type PageProps = {
   params: {
     id: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default async function Page({ params }: Props) {
+const ListingPage: FC<PageProps> = async ({ params }) => {
   const { id } = params;
 
-  // Example fetch, replace with your logic
-  const res = await fetch(`https://api.example.com/properties/${id}`);
-  const data = await res.json();
+  // Example: fetch property data
+  // const res = await fetch(...);
+  // const data = await res.json();
 
   return (
     <div>
-      <h1>{data.title}</h1>
+      <h1>Listing ID: {id}</h1>
     </div>
   );
-}
+};
+
+export default ListingPage;
