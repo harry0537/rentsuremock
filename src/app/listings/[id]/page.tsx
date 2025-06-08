@@ -5,7 +5,7 @@ type Props = {
   searchParams?: Record<string, string | string[] | undefined>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<import('next').Metadata> {
   return {
     title: `Listing ${params.id} | Rentsure`,
     description: 'View detailed information about this property.',
