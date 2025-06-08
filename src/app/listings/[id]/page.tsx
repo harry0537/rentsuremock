@@ -1,18 +1,20 @@
-import { FC } from 'react';
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { connectToDatabase } from '@/lib/mongodb';
-import { ObjectId } from 'mongodb';
-import PropertyDetails from '@/components/properties/PropertyDetails';
 
-// ✅ Fix: Correct type for dynamic route page
-type PageProps = {
+type Props = {
   params: {
     id: string;
   };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
-const ListingPage: FC<PageProps> = async ({ params }) => {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  return {
+    title: `Listing ${params.id} | Rentsure`,
+    description: 'View detailed information about this property.',
+  };
+}
+
+export default async function Page({ params }: Props) {
   const { id } = params;
 
   // Example: fetch property data
@@ -24,6 +26,4 @@ const ListingPage: FC<PageProps> = async ({ params }) => {
       <h1>Listing ID: {id}</h1>
     </div>
   );
-};
-
-export default ListingPage;
+}
