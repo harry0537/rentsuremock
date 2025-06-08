@@ -4,21 +4,20 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import PropertyDetails from '@/components/properties/PropertyDetails';
 
+// Metadata for the page
 export const metadata: Metadata = {
   title: 'Property Details | Rentsure',
   description: 'View detailed information about this property listing.',
 };
 
-// ✅ Do NOT import PageProps from anywhere. Use this clean local definition.
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default async function Page({ params }: PageProps) {
+export default async function Page({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { id } = params;
 
+  // Validate and fetch property data
   try {
     const { db } = await connectToDatabase();
 
