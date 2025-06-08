@@ -4,6 +4,7 @@ type Props = {
   params: {
     id: string;
   };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function Page({ params }: Props) {
+export default async function Page({ params }: Props) {
   const { id } = params;
   return <div>Listing ID: {id}</div>;
 }
