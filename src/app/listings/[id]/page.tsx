@@ -7,16 +7,16 @@ import PropertyDetails from '@/components/properties/PropertyDetails';
 // Metadata for the page
 export const metadata: Metadata = {
   title: 'Property Details | Rentsure',
-  description: 'View detailed information about this property listing.',
+  description: 'View detailed information about this property.',
 };
 
-interface PageParams {
+type PageProps = {
   params: {
     id: string;
   };
-}
+};
 
-export default async function Page({ params }: PageParams) {
+export default async function Page({ params }: PageProps) {
   const { id } = params;
 
   // Validate and fetch property data
