@@ -1,17 +1,20 @@
 import { Metadata } from 'next';
 
-type Props = {
+export async function generateMetadata({
+  params,
+}: {
   params: { id: string };
-  searchParams?: Record<string, string | string[] | undefined>;
-};
-
-export async function generateMetadata({ params }: Props): Promise<import('next').Metadata> {
+}): Promise<Metadata> {
   return {
     title: `Listing ${params.id} | Rentsure`,
     description: 'View detailed information about this property.',
   };
 }
 
-export default function Page({ params }: Props) {
-  return <div>Listing ID: {params.id}</div>;
+export default function Page({
+  params,
+}: {
+  params: { id: string };
+}) {
+  return <div className="p-4">Listing ID: {params.id}</div>;
 }
