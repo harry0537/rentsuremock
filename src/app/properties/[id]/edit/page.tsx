@@ -4,12 +4,18 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import PropertyForm from '@/components/PropertyForm';
 
-export const metadata: Metadata = {
-  title: 'Edit Property | Rentsure',
-  description: 'Edit your property listing details.',
-};
+export async function generateMetadata(
+  { params }: { params: { id: string } }
+): Promise<Metadata> {
+  return {
+    title: `Edit Property ${params.id} | Rentsure`,
+    description: 'Edit property details.',
+  };
+}
 
-export default async function Page({ params }) {
+export default async function Page(
+  { params }: { params: { id: string } }
+) {
   const { id } = params;
 
   try {
