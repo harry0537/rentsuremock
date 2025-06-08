@@ -9,14 +9,14 @@ export const metadata: Metadata = {
   description: 'View detailed information about this property listing.',
 };
 
-// ✅ Fresh local Props type
-type Props = {
+// ✅ Do NOT import PageProps from anywhere. Use this clean local definition.
+interface PageProps {
   params: {
     id: string;
   };
-};
+}
 
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: PageProps) {
   const { id } = params;
 
   try {
@@ -39,4 +39,4 @@ export default async function Page({ params }: Props) {
     console.error('Error fetching property:', error);
     notFound();
   }
-} 
+}
