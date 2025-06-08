@@ -1,52 +1,35 @@
-'use client';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { connectToDatabase } from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
+import MaintenanceForm from '@/components/MaintenanceForm';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useMaintenance } from '@/context/MaintenanceContext';
-import MaintenanceRequestForm from '@/components/MaintenanceRequestForm';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import { MaintenanceRequest } from '@/types/maintenance';
-import { useAuth } from '@/context/AuthContext';
+export const metadata: Metadata = {
+  title: 'New Maintenance Request | Rentsure',
+  description: 'Submit a new maintenance request for your property.',
+};
 
-export default function NewMaintenanceRequestPage({ params }: { params: { id: string } }) {
-  const router = useRouter();
-  const { createRequest } = useMaintenance();
-  const { user } = useAuth();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export default async function Page({ params }) {
+  const { id } = params;
 
-  const handleSubmit = async (data: Omit<MaintenanceRequest, 'id' | 'createdAt' | 'updatedAt'>) => {
-    try {
-      setIsSubmitting(true);
-      await createRequest({
-        ...data,
-        tenantId: user?.id || '',
-        status: 'pending',
-      });
-      router.push(`/properties/${params.id}`);
-    } catch (error) {
-      console.error('Error creating maintenance request:', error);
-      // TODO: Show error message to user
-    } finally {
-      setIsSubmitting(false);
+  try {
+    const { db } = await connectToDatabase();
+
+    if (!ObjectId.isValid(id)) {
+      notFound();
     }
-  };
 
-  return (
-    <ProtectedRoute requiredRole="tenant">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Submit Maintenance Request</h1>
-          <div className="bg-white shadow sm:rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <MaintenanceRequestForm
-                propertyId={params.id}
-                onSubmit={handleSubmit}
-                isSubmitting={isSubmitting}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </ProtectedRoute>
-  );
+    const property = await db
+      .collection('properties')
+      .findOne({ _id: new ObjectId(id) });
+
+    if (!property) {
+      notFound();
+    }
+
+    return <MaintenanceForm propertyId={id} />;
+  } catch (error) {
+    console.error('Error fetching property:', error);
+    notFound();
+  }
 } 
