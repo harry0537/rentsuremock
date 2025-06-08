@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
-import PropertyForm from '@/components/properties/PropertyForm';
+import PropertyForm from '@/components/PropertyForm';
 
 export const metadata: Metadata = {
   title: 'Edit Property | Rentsure',
