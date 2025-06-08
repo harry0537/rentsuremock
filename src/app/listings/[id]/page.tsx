@@ -10,11 +10,7 @@ export const metadata: Metadata = {
   description: 'View detailed information about this property listing.',
 };
 
-export default async function Page({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function Page({ params }) {
   const { id } = params;
 
   // Validate and fetch property data
