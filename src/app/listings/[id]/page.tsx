@@ -13,25 +13,13 @@ type Props = {
 export default async function Page({ params }: Props) {
   const { id } = params;
 
-  // Validate and fetch property data
-  try {
-    const { db } = await connectToDatabase();
+  // Example fetch, replace with your logic
+  const res = await fetch(`https://api.example.com/properties/${id}`);
+  const data = await res.json();
 
-    if (!ObjectId.isValid(id)) {
-      notFound();
-    }
-
-    const property = await db
-      .collection('properties')
-      .findOne({ _id: new ObjectId(id) });
-
-    if (!property) {
-      notFound();
-    }
-
-    return <PropertyDetails property={property} />;
-  } catch (error) {
-    console.error('Error fetching property:', error);
-    notFound();
-  }
+  return (
+    <div>
+      <h1>{data.title}</h1>
+    </div>
+  );
 }
