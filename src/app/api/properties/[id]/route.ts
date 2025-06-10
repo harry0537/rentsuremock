@@ -1,131 +1,106 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-type Context = { params: { id: string } };
-
-export async function GET(request: NextRequest, context: Context) {
+export async function GET(request: NextRequest) {
   try {
-    const propertyId = context?.params?.id;
+    const propertyId = request.url.split('/').pop();
+    const { db } = await connectToDatabase();
 
-    if (!ObjectId.isValid(propertyId)) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid property ID' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
+    if (!propertyId || !ObjectId.isValid(propertyId)) {
+      return NextResponse.json(
+        { error: 'Invalid property ID' },
+        { status: 400 }
       );
     }
 
-    const { db } = await connectToDatabase();
-    const result = await db
+    const property = await db
       .collection('properties')
       .findOne({ _id: new ObjectId(propertyId) });
 
-    if (!result) {
-      return new Response(
-        JSON.stringify({ error: 'Property not found' }),
-        { status: 404, headers: { 'Content-Type': 'application/json' } }
+    if (!property) {
+      return NextResponse.json(
+        { error: 'Property not found' },
+        { status: 404 }
       );
     }
 
-    return new Response(JSON.stringify(result), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (err) {
-    console.error('GET error:', err);
-    return new Response(
-      JSON.stringify({ error: 'Failed to fetch property' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    return NextResponse.json(property);
+  } catch (error) {
+    console.error('GET error:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch property' },
+      { status: 500 }
     );
   }
 }
 
-export async function PATCH(request: NextRequest, context: Context) {
+export async function PUT(request: NextRequest) {
   try {
-    const propertyId = context?.params?.id;
-
-    if (!ObjectId.isValid(propertyId)) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid property ID' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
+    const propertyId = request.url.split('/').pop();
     const { db } = await connectToDatabase();
     const updates = await request.json();
 
-    if (!updates || Object.keys(updates).length === 0) {
-      return new Response(
-        JSON.stringify({ error: 'No updates provided' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
+    if (!propertyId || !ObjectId.isValid(propertyId)) {
+      return NextResponse.json(
+        { error: 'Invalid property ID' },
+        { status: 400 }
       );
     }
 
     const result = await db
       .collection('properties')
-      .findOneAndUpdate(
+      .updateOne(
         { _id: new ObjectId(propertyId) },
-        { 
-          $set: { 
-            ...updates,
-            updatedAt: new Date()
-          }
-        },
-        { returnDocument: 'after' }
+        { $set: { ...updates, updatedAt: new Date() } }
       );
 
-    if (!result) {
-      return new Response(
-        JSON.stringify({ error: 'Property not found' }),
-        { status: 404, headers: { 'Content-Type': 'application/json' } }
+    if (result.matchedCount === 0) {
+      return NextResponse.json(
+        { error: 'Property not found' },
+        { status: 404 }
       );
     }
 
-    return new Response(JSON.stringify(result), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (err) {
-    console.error('PATCH error:', err);
-    return new Response(
-      JSON.stringify({ error: 'Failed to update property' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    return NextResponse.json({ message: 'Property updated' });
+  } catch (error) {
+    console.error('PUT error:', error);
+    return NextResponse.json(
+      { error: 'Failed to update property' },
+      { status: 500 }
     );
   }
 }
 
-export async function DELETE(request: NextRequest, context: Context) {
+export async function DELETE(request: NextRequest) {
   try {
-    const propertyId = context?.params?.id;
+    const propertyId = request.url.split('/').pop();
+    const { db } = await connectToDatabase();
 
-    if (!ObjectId.isValid(propertyId)) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid property ID' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
+    if (!propertyId || !ObjectId.isValid(propertyId)) {
+      return NextResponse.json(
+        { error: 'Invalid property ID' },
+        { status: 400 }
       );
     }
 
-    const { db } = await connectToDatabase();
     const result = await db
       .collection('properties')
-      .findOneAndDelete({ _id: new ObjectId(propertyId) });
+      .deleteOne({ _id: new ObjectId(propertyId) });
 
-    if (!result) {
-      return new Response(
-        JSON.stringify({ error: 'Property not found' }),
-        { status: 404, headers: { 'Content-Type': 'application/json' } }
+    if (result.deletedCount === 0) {
+      return NextResponse.json(
+        { error: 'Property not found' },
+        { status: 404 }
       );
     }
 
-    return new Response(JSON.stringify({ message: 'Property deleted successfully' }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (err) {
-    console.error('DELETE error:', err);
-    return new Response(
-      JSON.stringify({ error: 'Failed to delete property' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    return NextResponse.json({ message: 'Property deleted' });
+  } catch (error) {
+    console.error('DELETE error:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete property' },
+      { status: 500 }
     );
   }
 }
