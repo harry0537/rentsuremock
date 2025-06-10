@@ -18,7 +18,7 @@ interface DashboardStats {
 }
 
 export default function LandlordDashboard() {
-  const { getRequestsByProperty, getPropertiesByLandlord } = useMaintenance();
+  const { getRequestsByProperty } = useMaintenance();
   const [stats, setStats] = useState<DashboardStats>({
     totalRequests: 0,
     pendingRequests: 0,

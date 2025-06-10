@@ -1,41 +1,106 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-type Context = { params: { id: string } };
-
-export async function GET(request: NextRequest, context: Context) {
+export async function GET(request: NextRequest) {
   try {
-    const maintenanceId = context?.params?.id;
+    const maintenanceId = request.url.split('/').pop();
+    const { db } = await connectToDatabase();
 
-    if (!ObjectId.isValid(maintenanceId)) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid maintenance ID' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
+    if (!maintenanceId || !ObjectId.isValid(maintenanceId)) {
+      return NextResponse.json(
+        { error: 'Invalid maintenance request ID' },
+        { status: 400 }
       );
     }
 
-    const { db } = await connectToDatabase();
-    const result = await db
+    const request = await db
       .collection('maintenance_requests')
       .findOne({ _id: new ObjectId(maintenanceId) });
 
-    if (!result) {
-      return new Response(
-        JSON.stringify({ error: 'Maintenance request not found' }),
-        { status: 404, headers: { 'Content-Type': 'application/json' } }
+    if (!request) {
+      return NextResponse.json(
+        { error: 'Maintenance request not found' },
+        { status: 404 }
       );
     }
 
-    return new Response(JSON.stringify(result), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (err) {
-    console.error('GET error:', err);
-    return new Response(
-      JSON.stringify({ error: 'Failed to fetch maintenance request' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    return NextResponse.json(request);
+  } catch (error) {
+    console.error('GET error:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch maintenance request' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const maintenanceId = request.url.split('/').pop();
+    const { db } = await connectToDatabase();
+    const updates = await request.json();
+
+    if (!maintenanceId || !ObjectId.isValid(maintenanceId)) {
+      return NextResponse.json(
+        { error: 'Invalid maintenance request ID' },
+        { status: 400 }
+      );
+    }
+
+    const result = await db
+      .collection('maintenance_requests')
+      .updateOne(
+        { _id: new ObjectId(maintenanceId) },
+        { $set: { ...updates, updatedAt: new Date() } }
+      );
+
+    if (result.matchedCount === 0) {
+      return NextResponse.json(
+        { error: 'Maintenance request not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: 'Maintenance request updated' });
+  } catch (error) {
+    console.error('PUT error:', error);
+    return NextResponse.json(
+      { error: 'Failed to update maintenance request' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const maintenanceId = request.url.split('/').pop();
+    const { db } = await connectToDatabase();
+
+    if (!maintenanceId || !ObjectId.isValid(maintenanceId)) {
+      return NextResponse.json(
+        { error: 'Invalid maintenance request ID' },
+        { status: 400 }
+      );
+    }
+
+    const result = await db
+      .collection('maintenance_requests')
+      .deleteOne({ _id: new ObjectId(maintenanceId) });
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json(
+        { error: 'Maintenance request not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: 'Maintenance request deleted' });
+  } catch (error) {
+    console.error('DELETE error:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete maintenance request' },
+      { status: 500 }
     );
   }
 }
