@@ -43,10 +43,10 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(result);
-  } catch (error) {
-    console.error('Error uploading file:', error);
+  } catch (error: unknown) {
+    console.error('Upload error:', error);
     return NextResponse.json(
-      { error: 'Failed to upload file' },
+      { error: 'Failed to upload image' },
       { status: 500 }
     );
   }

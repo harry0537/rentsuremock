@@ -19,10 +19,11 @@ export async function POST(request: Request) {
       { error: 'Invalid input data' },
       { status: 400 }
     );
-  } catch (_error) {
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+  } catch (error) {
+    console.error('Signup error:', error);
+    return new Response(
+      JSON.stringify({ error: 'Failed to create user' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
 } 

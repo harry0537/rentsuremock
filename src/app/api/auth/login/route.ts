@@ -19,10 +19,11 @@ export async function POST(request: Request) {
       { error: 'Invalid credentials' },
       { status: 401 }
     );
-  } catch (_error) {
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+  } catch (error) {
+    console.error('Login error:', error);
+    return new Response(
+      JSON.stringify({ error: 'Authentication failed' }),
+      { status: 401, headers: { 'Content-Type': 'application/json' } }
     );
   }
 } 

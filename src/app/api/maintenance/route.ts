@@ -15,9 +15,10 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(filteredRequests);
-  } catch (_error) {
+  } catch (error) {
+    console.error('GET error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to fetch maintenance requests' },
       { status: 500 }
     );
   }
@@ -37,9 +38,10 @@ export async function POST(request: Request) {
 
     mockRequests.push(newRequest);
     return NextResponse.json(newRequest);
-  } catch (_error) {
+  } catch (error) {
+    console.error('POST error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to create maintenance request' },
       { status: 500 }
     );
   }

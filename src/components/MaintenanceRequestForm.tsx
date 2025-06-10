@@ -45,9 +45,9 @@ export default function MaintenanceRequestForm({
       });
 
       onSuccess();
-    } catch (err) {
-      setError('Failed to create maintenance request. Please try again.');
-      console.error('Error creating maintenance request:', err);
+    } catch (error: unknown) {
+      console.error('Error submitting maintenance request:', error);
+      setError('Failed to submit maintenance request');
     } finally {
       setIsSubmitting(false);
     }

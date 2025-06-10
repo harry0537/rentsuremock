@@ -33,7 +33,7 @@ export default function MaintenanceRequestDetails({
 
   useEffect(() => {
     loadNotes();
-  }, [request.id]);
+  }, [loadNotes]);
 
   const loadNotes = async () => {
     try {

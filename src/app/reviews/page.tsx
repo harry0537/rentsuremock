@@ -1,4 +1,4 @@
-import { FaStar, FaUser, FaCheck } from 'react-icons/fa'
+import { FaStar } from 'react-icons/fa'
 
 // Mock data for reviews
 const reviews = [
@@ -73,7 +73,7 @@ export default function ReviewsPage() {
             <div key={review.id} className="card">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-                  <FaUser className="w-6 h-6 text-primary-600" />
+                  <FaStar className="w-6 h-6 text-primary-600" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">

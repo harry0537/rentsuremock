@@ -1,4 +1,4 @@
-import { FaHome, FaUser, FaBell, FaEnvelope, FaStar, FaCheck } from 'react-icons/fa'
+import { FaHome, FaUser, FaBell, FaEnvelope, FaStar } from 'react-icons/fa'
 import Image from 'next/image'
 
 // Mock data for tenant dashboard

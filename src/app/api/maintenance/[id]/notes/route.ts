@@ -27,8 +27,8 @@ export async function GET(
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (err) {
-    console.error('GET error:', err);
+  } catch (error) {
+    console.error('GET error:', error);
     return new Response(
       JSON.stringify({ error: 'Failed to fetch maintenance notes' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
@@ -73,8 +73,8 @@ export async function POST(
       JSON.stringify({ ...note, _id: result.insertedId }),
       { status: 201, headers: { 'Content-Type': 'application/json' } }
     );
-  } catch (err) {
-    console.error('POST error:', err);
+  } catch (error) {
+    console.error('POST error:', error);
     return new Response(
       JSON.stringify({ error: 'Failed to add maintenance note' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }

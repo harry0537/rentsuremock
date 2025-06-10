@@ -1,7 +1,19 @@
-export const uploadImage = async (file: File): Promise<string> => {
-  // Simulate upload delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
- 
-  // Return a placeholder image URL
-  return 'https://placehold.co/600x400';
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export const uploadImage = async (base64Image: string): Promise<string> => {
+  try {
+    const result = await cloudinary.uploader.upload(base64Image, {
+      folder: 'rentsure',
+    });
+    return result.secure_url;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw new Error('Failed to upload image');
+  }
 }; 

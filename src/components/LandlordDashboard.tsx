@@ -18,7 +18,7 @@ interface DashboardStats {
 }
 
 export default function LandlordDashboard() {
-  const { getRequestsByProperty } = useMaintenance();
+  const { getRequestsByProperty, getPropertiesByLandlord } = useMaintenance();
   const [stats, setStats] = useState<DashboardStats>({
     totalRequests: 0,
     pendingRequests: 0,
@@ -29,37 +29,21 @@ export default function LandlordDashboard() {
   });
   const [recentRequests, setRecentRequests] = useState<MaintenanceRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [properties, setProperties] = useState([]);
+  const [maintenanceRequests, setMaintenanceRequests] = useState([]);
 
   const loadDashboardData = useCallback(async () => {
     try {
-      setLoading(true);
-      // In a real app, this would fetch data for all properties
-      const requests = await getRequestsByProperty('1');
-      
-      // Calculate stats
-      const stats: DashboardStats = {
-        totalRequests: requests.length,
-        pendingRequests: requests.filter(r => r.status === 'pending').length,
-        inProgressRequests: requests.filter(r => r.status === 'in_progress').length,
-        completedRequests: requests.filter(r => r.status === 'completed').length,
-        averageResolutionTime: calculateAverageResolutionTime(requests),
-        highPriorityRequests: requests.filter(r => 
-          r.priority === 'high' || r.priority === 'emergency'
-        ).length,
-      };
-
-      setStats(stats);
-      setRecentRequests(
-        requests
-          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-          .slice(0, 5)
-      );
+      const [properties, requests] = await Promise.all([
+        getPropertiesByLandlord(userId),
+        getRequestsByProperty(userId)
+      ]);
+      setProperties(properties);
+      setMaintenanceRequests(requests);
     } catch (error) {
       console.error('Error loading dashboard data:', error);
-    } finally {
-      setLoading(false);
     }
-  }, []);
+  }, [userId, getPropertiesByLandlord, getRequestsByProperty]);
 
   useEffect(() => {
     loadDashboardData();
