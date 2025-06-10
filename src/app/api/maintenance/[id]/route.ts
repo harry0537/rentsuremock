@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 
 export async function GET(request: NextRequest) {
   try {
-    const maintenanceId = request.url.split('/').pop();
+    const maintenanceId: string | undefined = request.url.split('/').pop();
     const { db } = await connectToDatabase();
 
     if (!maintenanceId || !ObjectId.isValid(maintenanceId)) {
