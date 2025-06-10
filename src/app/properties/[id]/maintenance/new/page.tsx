@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   description: 'Submit a new maintenance request for your property.',
 };
 
-export default async function Page({ params }) {
-  const { id } = params;
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   try {
     const { db } = await connectToDatabase();
