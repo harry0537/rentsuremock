@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useMaintenance } from '@/context/MaintenanceContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -12,10 +12,23 @@ import MaintenanceCalendar from '@/components/MaintenanceCalendar';
 import ViewSwitcher from '@/components/ViewSwitcher';
 import { MaintenanceRequest } from '@/types/maintenance';
 
+const fetchRequests = async (getRequestsByProperty: (propertyId: string) => Promise<MaintenanceRequest[]>, propertyId: string): Promise<MaintenanceRequest[]> => {
+  try {
+    const data = await getRequestsByProperty(propertyId);
+    return data;
+  } catch (error: unknown) {
+    console.error('Error fetching maintenance requests:', error);
+    return [];
+  }
+};
+
 export default function MaintenanceRequestsPage() {
+  const [requests, setRequests] = useState<MaintenanceRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { getRequestsByProperty } = useMaintenance();
   const params = useParams();
-  const propertyId = params.id as string;
-  const { requests, loading, error } = useMaintenance();
+  const propertyId = params?.id as string;
   const [selectedRequest, setSelectedRequest] = useState<MaintenanceRequest | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [filters, setFilters] = useState({
@@ -27,6 +40,26 @@ export default function MaintenanceRequestsPage() {
   const [sortBy, setSortBy] = useState('createdAt');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentView, setCurrentView] = useState<'list' | 'calendar'>('list');
+
+  useEffect(() => {
+    const loadRequests = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchRequests(getRequestsByProperty, propertyId);
+        setRequests(data);
+        setError(null);
+      } catch (err) {
+        setError('Failed to load maintenance requests');
+        console.error('Error loading maintenance requests:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (propertyId) {
+      loadRequests();
+    }
+  }, [propertyId, getRequestsByProperty]);
 
   const handleFilterChange = (newFilters: any) => {
     setFilters({ ...filters, ...newFilters });

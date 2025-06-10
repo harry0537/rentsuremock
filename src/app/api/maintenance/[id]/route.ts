@@ -2,30 +2,30 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
-    const maintenanceId: string | undefined = request.url.split('/').pop();
+    const maintenanceId: string | undefined = _request.url.split('/').pop();
     const { db } = await connectToDatabase();
 
     if (!maintenanceId || !ObjectId.isValid(maintenanceId)) {
       return NextResponse.json(
-        { error: 'Invalid maintenance request ID' },
+        { error: 'Invalid maintenance ID' },
         { status: 400 }
       );
     }
 
-    const request = await db
-      .collection('maintenance_requests')
+    const maintenance = await db
+      .collection('maintenanceRequests')
       .findOne({ _id: new ObjectId(maintenanceId) });
 
-    if (!request) {
+    if (!maintenance) {
       return NextResponse.json(
         { error: 'Maintenance request not found' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(request);
+    return NextResponse.json(maintenance);
   } catch (error) {
     console.error('GET error:', error);
     return NextResponse.json(
@@ -35,21 +35,21 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function PUT(_request: NextRequest) {
   try {
-    const maintenanceId = request.url.split('/').pop();
+    const maintenanceId: string | undefined = _request.url.split('/').pop();
     const { db } = await connectToDatabase();
-    const updates = await request.json();
+    const updates = await _request.json();
 
     if (!maintenanceId || !ObjectId.isValid(maintenanceId)) {
       return NextResponse.json(
-        { error: 'Invalid maintenance request ID' },
+        { error: 'Invalid maintenance ID' },
         { status: 400 }
       );
     }
 
     const result = await db
-      .collection('maintenance_requests')
+      .collection('maintenanceRequests')
       .updateOne(
         { _id: new ObjectId(maintenanceId) },
         { $set: { ...updates, updatedAt: new Date() } }
@@ -72,20 +72,20 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(_request: NextRequest) {
   try {
-    const maintenanceId = request.url.split('/').pop();
+    const maintenanceId: string | undefined = _request.url.split('/').pop();
     const { db } = await connectToDatabase();
 
     if (!maintenanceId || !ObjectId.isValid(maintenanceId)) {
       return NextResponse.json(
-        { error: 'Invalid maintenance request ID' },
+        { error: 'Invalid maintenance ID' },
         { status: 400 }
       );
     }
 
     const result = await db
-      .collection('maintenance_requests')
+      .collection('maintenanceRequests')
       .deleteOne({ _id: new ObjectId(maintenanceId) });
 
     if (result.deletedCount === 0) {
