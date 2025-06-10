@@ -2,15 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
-    const maintenanceId = params.id;
+    const maintenanceId = request.url.split('/').pop();
     const { db } = await connectToDatabase();
 
-    if (!ObjectId.isValid(maintenanceId)) {
+    if (!maintenanceId || !ObjectId.isValid(maintenanceId)) {
       return NextResponse.json(
         { error: 'Invalid maintenance request ID' },
         { status: 400 }
@@ -33,16 +30,13 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest) {
   try {
-    const maintenanceId = params.id;
+    const maintenanceId = request.url.split('/').pop();
     const { db } = await connectToDatabase();
     const { content, userId, userRole } = await request.json();
 
-    if (!ObjectId.isValid(maintenanceId)) {
+    if (!maintenanceId || !ObjectId.isValid(maintenanceId)) {
       return NextResponse.json(
         { error: 'Invalid maintenance request ID' },
         { status: 400 }

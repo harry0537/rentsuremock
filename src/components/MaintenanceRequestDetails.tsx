@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useMaintenance } from '@/context/MaintenanceContext';
 import { MaintenanceRequest } from '@/types/maintenance';
 import NotificationToast from './NotificationToast';
@@ -31,11 +31,7 @@ export default function MaintenanceRequestDetails({
     message: '',
   });
 
-  useEffect(() => {
-    loadNotes();
-  }, [loadNotes]);
-
-  const loadNotes = async () => {
+  const loadNotes = useCallback(async () => {
     try {
       const requestNotes = await getNotes(request.id);
       setNotes(requestNotes);
@@ -43,7 +39,11 @@ export default function MaintenanceRequestDetails({
       console.error('Error loading notes:', error);
       showNotification('error', 'Error', 'Failed to load notes');
     }
-  };
+  }, [getNotes, request.id]);
+
+  useEffect(() => {
+    loadNotes();
+  }, [loadNotes]);
 
   const showNotification = (
     type: 'success' | 'error' | 'warning',

@@ -1,6 +1,5 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
-import { ObjectId } from 'mongodb';
 
 export async function GET() {
   try {
@@ -8,7 +7,7 @@ export async function GET() {
     const properties = await db.collection('properties').find({}).toArray();
     return NextResponse.json(properties);
   } catch (error) {
-    console.error('Error fetching properties:', error);
+    console.error('GET error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch properties' },
       { status: 500 }

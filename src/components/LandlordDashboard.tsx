@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useMaintenance } from '@/context/MaintenanceContext';
+import { useMaintenance } from '@/hooks/useMaintenance';
 import { MaintenanceRequest } from '@/types/maintenance';
 import {
   ChartBarIcon,
@@ -29,34 +29,49 @@ export default function LandlordDashboard() {
   });
   const [recentRequests, setRecentRequests] = useState<MaintenanceRequest[]>([]);
   const [loading, setLoading] = useState(true);
-  const [properties, setProperties] = useState([]);
-  const [maintenanceRequests, setMaintenanceRequests] = useState([]);
 
   const loadDashboardData = useCallback(async () => {
     try {
-      const [properties, requests] = await Promise.all([
-        getPropertiesByLandlord(userId),
-        getRequestsByProperty(userId)
-      ]);
-      setProperties(properties);
-      setMaintenanceRequests(requests);
+      setLoading(true);
+      const requests = await getRequestsByProperty('1');
+      
+      // Calculate stats
+      const newStats: DashboardStats = {
+        totalRequests: requests.length,
+        pendingRequests: requests.filter(r => r.status === 'pending').length,
+        inProgressRequests: requests.filter(r => r.status === 'in_progress').length,
+        completedRequests: requests.filter(r => r.status === 'completed').length,
+        averageResolutionTime: calculateAverageResolutionTime(requests),
+        highPriorityRequests: requests.filter(r => 
+          r.priority === 'high' || r.priority === 'emergency'
+        ).length,
+      };
+
+      setStats(newStats);
+      setRecentRequests(
+        requests
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .slice(0, 5)
+      );
     } catch (error) {
       console.error('Error loading dashboard data:', error);
+    } finally {
+      setLoading(false);
     }
-  }, [userId, getPropertiesByLandlord, getRequestsByProperty]);
+  }, [getRequestsByProperty]);
 
   useEffect(() => {
     loadDashboardData();
   }, [loadDashboardData]);
 
   const calculateAverageResolutionTime = (requests: MaintenanceRequest[]): number => {
-    const completedRequests = requests.filter(r => r.status === 'completed' && r.completedAt);
+    const completedRequests = requests.filter(r => r.status === 'completed');
     if (completedRequests.length === 0) return 0;
 
-    const totalTime = completedRequests.reduce((acc, request) => {
-      const created = new Date(request.createdAt).getTime();
-      const completed = new Date(request.completedAt!).getTime();
-      return acc + (completed - created);
+    const totalTime = completedRequests.reduce((acc, req) => {
+      const start = new Date(req.createdAt).getTime();
+      const end = new Date(req.completedAt || Date.now()).getTime();
+      return acc + (end - start);
     }, 0);
 
     return Math.round(totalTime / completedRequests.length / (1000 * 60 * 60)); // Convert to hours
