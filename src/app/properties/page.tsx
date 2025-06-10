@@ -6,6 +6,12 @@ import PropertyCard from '@/components/PropertyCard';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 
+interface Filters {
+  minPrice?: number;
+  maxPrice?: number;
+  bedrooms?: number;
+}
+
 export default function PropertiesPage() {
   const { properties, loading, error, filters, setFilters, fetchProperties } = useProperty();
   const { user } = useAuth();
@@ -16,7 +22,7 @@ export default function PropertiesPage() {
   }, [fetchProperties]);
 
   const handleFilterChange = (key: string, value: string | number | boolean) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters((prev: Filters) => ({ ...prev, [key]: value }));
   };
 
   const filteredProperties = properties.filter(property => {

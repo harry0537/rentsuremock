@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       notFound();
     }
 
-    return <MaintenanceRequestForm propertyId={id} />;
+    return <MaintenanceRequestForm propertyId={id} onSuccess={() => {}} onCancel={() => {}} />;
   } catch (error) {
     console.error('Error fetching property:', error);
     notFound();
