@@ -1,17 +1,18 @@
 import { Metadata } from 'next';
 
 export async function generateMetadata(
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
+  const { id } = await params;
   return {
-    title: `Listing ${params.id} | Rentsure`,
+    title: `Listing ${id} | Rentsure`,
     description: 'View detailed information about this property.',
   };
 }
 
 export default async function Page(
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   return <div className="p-4">Listing ID: {id}</div>;
 } 
