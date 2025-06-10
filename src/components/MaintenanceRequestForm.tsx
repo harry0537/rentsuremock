@@ -10,13 +10,11 @@ import { toast } from 'react-hot-toast';
 interface MaintenanceRequestFormProps {
   propertyId: string;
   onSuccess: () => void;
-  onCancel: () => void;
 }
 
 export default function MaintenanceRequestForm({
   propertyId,
   onSuccess,
-  onCancel,
 }: MaintenanceRequestFormProps) {
   const { createRequest } = useMaintenance();
   const [title, setTitle] = useState('');

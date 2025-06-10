@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(filteredRequests);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
     mockRequests.push(newRequest);
     return NextResponse.json(newRequest);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

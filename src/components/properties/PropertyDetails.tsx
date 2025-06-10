@@ -1,4 +1,5 @@
 import { FaMapMarkerAlt, FaBed, FaBath, FaRuler, FaStar, FaUser } from 'react-icons/fa';
+import Image from 'next/image';
 import { Property } from '@/types/property';
 
 interface PropertyDetailsProps {
@@ -10,9 +11,11 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
     <div className="container mx-auto px-4 py-8">
       {/* Image Carousel */}
       <div className="relative h-96 mb-8 rounded-lg overflow-hidden">
-        <img
+        <Image
           src={property.images[0]}
           alt={property.title}
+          width={1200}
+          height={600}
           className="w-full h-full object-cover"
         />
         {property.verified && (

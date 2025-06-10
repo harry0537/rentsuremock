@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useMaintenance } from '@/context/MaintenanceContext';
 import { MaintenanceRequest } from '@/types/maintenance';
 import {
@@ -30,11 +30,7 @@ export default function LandlordDashboard() {
   const [recentRequests, setRecentRequests] = useState<MaintenanceRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       setLoading(true);
       // In a real app, this would fetch data for all properties
@@ -63,7 +59,11 @@ export default function LandlordDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, [loadDashboardData]);
 
   const calculateAverageResolutionTime = (requests: MaintenanceRequest[]): number => {
     const completedRequests = requests.filter(r => r.status === 'completed' && r.completedAt);

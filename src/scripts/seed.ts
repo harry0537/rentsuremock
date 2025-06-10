@@ -58,7 +58,7 @@ async function seed() {
     ]);
 
     // Create demo maintenance requests
-    const maintenanceRequests = await db.collection('maintenanceRequests').insertMany([
+    await db.collection('maintenanceRequests').insertMany([
       {
         propertyId: properties.insertedIds[0],
         tenantId: tenant.insertedId,

@@ -2,7 +2,9 @@ import { NextRequest } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-export async function GET(request: NextRequest, context: any) {
+type Context = { params: { id: string } };
+
+export async function GET(request: NextRequest, context: Context) {
   try {
     const propertyId = context?.params?.id;
 
@@ -38,7 +40,7 @@ export async function GET(request: NextRequest, context: any) {
   }
 }
 
-export async function PATCH(request: NextRequest, context: any) {
+export async function PATCH(request: NextRequest, context: Context) {
   try {
     const propertyId = context?.params?.id;
 
@@ -92,7 +94,7 @@ export async function PATCH(request: NextRequest, context: any) {
   }
 }
 
-export async function DELETE(request: NextRequest, context: any) {
+export async function DELETE(request: NextRequest, context: Context) {
   try {
     const propertyId = context?.params?.id;
 

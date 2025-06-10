@@ -10,20 +10,11 @@ interface MaintenanceFiltersProps {
     dateRange: string;
   }) => void;
   onSortChange: (sortBy: string) => void;
-  filters: {
-    status: string;
-    priority: string;
-    category: string;
-    dateRange: string;
-  };
-  sortBy: string;
 }
 
 export default function MaintenanceFilters({
   onFilterChange,
   onSortChange,
-  filters,
-  sortBy,
 }: MaintenanceFiltersProps) {
   const statusOptions = [
     { value: 'all', label: 'All Statuses' },

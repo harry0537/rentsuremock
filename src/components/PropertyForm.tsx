@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Property } from '@/types/property';
+import Image from 'next/image';
 
 interface PropertyFormProps {
   initialData?: Partial<Property>;
@@ -242,9 +243,11 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
           <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {images.map((image, index) => (
               <div key={index} className="relative">
-                <img
+                <Image
                   src={image}
                   alt={`Property image ${index + 1}`}
+                  width={96}
+                  height={96}
                   className="h-24 w-24 object-cover rounded-lg"
                 />
                 <button

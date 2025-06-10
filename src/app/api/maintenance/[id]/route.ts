@@ -2,7 +2,9 @@ import { NextRequest } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-export async function GET(request: NextRequest, context: any) {
+type Context = { params: { id: string } };
+
+export async function GET(request: NextRequest, context: Context) {
   try {
     const maintenanceId = context?.params?.id;
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useMaintenance } from '@/context/MaintenanceContext';
 import { MaintenanceRequest } from '@/types/maintenance';
 import NotificationToast from './NotificationToast';
+import Image from 'next/image';
 
 interface MaintenanceRequestDetailsProps {
   request: MaintenanceRequest;
@@ -155,10 +156,12 @@ export default function MaintenanceRequestDetails({
             <h4 className="text-sm font-medium text-gray-900">Images</h4>
             <div className="mt-2 grid grid-cols-2 gap-4 sm:grid-cols-3">
               {request.images.map((image, index) => (
-                <img
+                <Image
                   key={index}
                   src={image}
                   alt={`Maintenance request image ${index + 1}`}
+                  width={128}
+                  height={128}
                   className="h-32 w-full object-cover rounded-lg"
                 />
               ))}

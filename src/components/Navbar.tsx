@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { FaHome, FaUser, FaBell } from 'react-icons/fa'
+import { FaUser, FaBell } from 'react-icons/fa'
 import { useAuth } from '@/context/AuthContext'
 
 export default function Navbar() {

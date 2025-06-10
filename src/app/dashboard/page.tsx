@@ -1,4 +1,5 @@
 import { FaHome, FaUser, FaBell, FaEnvelope, FaStar, FaCheck } from 'react-icons/fa'
+import Image from 'next/image'
 
 // Mock data for tenant dashboard
 const tenantData = {
@@ -124,9 +125,11 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {tenantData.savedListings.map((listing) => (
                     <div key={listing.id} className="flex gap-4">
-                      <img
+                      <Image
                         src={listing.image}
                         alt={listing.title}
+                        width={96}
+                        height={96}
                         className="w-24 h-24 object-cover rounded-lg"
                       />
                       <div>
@@ -204,9 +207,11 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {landlordData.listings.map((listing) => (
                     <div key={listing.id} className="flex gap-4">
-                      <img
+                      <Image
                         src={listing.image}
                         alt={listing.title}
+                        width={96}
+                        height={96}
                         className="w-24 h-24 object-cover rounded-lg"
                       />
                       <div>
