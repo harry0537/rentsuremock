@@ -189,8 +189,6 @@ export default function MaintenanceRequestsPage() {
                   <MaintenanceFilters
                     onFilterChange={handleFilterChange}
                     onSortChange={handleSortChange}
-                    filters={filters}
-                    sortBy={sortBy}
                   />
                 </div>
               </div>
