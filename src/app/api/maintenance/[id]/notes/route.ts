@@ -2,11 +2,12 @@ import { NextRequest } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-type Context = { params: { id: string } };
-
-export async function GET(request: NextRequest, context: Context) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const maintenanceId = context?.params?.id;
+    const maintenanceId = params.id;
     const { db } = await connectToDatabase();
 
     if (!ObjectId.isValid(maintenanceId)) {
@@ -35,9 +36,12 @@ export async function GET(request: NextRequest, context: Context) {
   }
 }
 
-export async function POST(request: NextRequest, context: Context) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const maintenanceId = context?.params?.id;
+    const maintenanceId = params.id;
     const { db } = await connectToDatabase();
     const { content, userId, userRole } = await request.json();
 
