@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "ts-node src/scripts/seed.ts",
+    "seed-properties": "node src/scripts/seed-properties.js",
     "demo": "ts-node src/scripts/demo.ts",
     "test:setup": "ts-node src/scripts/test-setup.ts"
   },
