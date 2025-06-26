@@ -12,10 +12,12 @@ export default function NewPropertyPage() {
   const { createProperty } = useProperty();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (data: Omit<Property, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleSubmit = async (data: Partial<Property>) => {
     try {
       setIsSubmitting(true);
-      await createProperty(data);
+      // Convert partial data to the format expected by createProperty
+      const propertyData = data as Omit<Property, 'id' | 'createdAt' | 'updatedAt'>;
+      await createProperty(propertyData);
       router.push('/properties');
     } catch (error) {
       console.error('Error creating property:', error);

@@ -72,7 +72,7 @@ export function PropertyProvider({ children }: { children: ReactNode }) {
       if (!response.ok) throw new Error('Failed to update property');
       const updatedProperty = await response.json();
       setProperties(prev =>
-        prev.map(p => (p.id === id ? { ...p, ...updatedProperty } : p))
+        prev.map(p => (p._id === id ? { ...p, ...updatedProperty } : p))
       );
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -90,7 +90,7 @@ export function PropertyProvider({ children }: { children: ReactNode }) {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Failed to delete property');
-      setProperties(prev => prev.filter(p => p.id !== id));
+      setProperties(prev => prev.filter(p => p._id !== id));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

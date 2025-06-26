@@ -35,7 +35,7 @@ export async function POST(request: Request) {
           folder: 'rentsure',
           resource_type: 'auto',
         },
-        (error: Error | undefined, result: any) => {
+        (error: Error | undefined, result: { secure_url: string; public_id: string } | undefined) => {
           if (error) reject(error);
           else resolve(result);
         }

@@ -7,16 +7,25 @@ import Image from 'next/image';
 
 interface PropertyFormProps {
   initialData?: Partial<Property>;
-  onSubmit: (data: Omit<Property, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  onSubmit: (data: Partial<Property>) => Promise<void>;
   isSubmitting?: boolean;
 }
 
 export default function PropertyForm({ initialData, onSubmit, isSubmitting }: PropertyFormProps) {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm<Partial<Property>>({
     defaultValues: initialData,
   });
 
   const [images, setImages] = useState<string[]>(initialData?.images || []);
+
+  const handleFormSubmit = async (data: Partial<Property>) => {
+    // Add the images to the form data
+    const formData = {
+      ...data,
+      images,
+    };
+    await onSubmit(formData);
+  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -29,7 +38,7 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
           Title

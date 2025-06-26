@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 interface PropertyFiltersProps {
-  onFilterChange: (key: string, value: string | number | boolean) => void;
+  onFilterChange: (key: string, value: string | number | boolean | string[]) => void;
 }
 
 export default function PropertyFilters({ onFilterChange }: PropertyFiltersProps) {
@@ -109,7 +109,7 @@ export default function PropertyFilters({ onFilterChange }: PropertyFiltersProps
                 <label key={amenity} className="flex items-center">
                   <input
                     type="checkbox"
-                    onChange={(e) => {
+                    onChange={() => {
                       const currentAmenities = document.querySelectorAll('input[type="checkbox"]:checked');
                       const amenities = Array.from(currentAmenities).map((input) => (input as HTMLInputElement).value);
                       onFilterChange('amenities', amenities);

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useMaintenance } from '@/context/MaintenanceContext';
-import { MaintenanceCategory, MaintenanceTag } from '@/types/maintenance';
+import { MaintenanceCategory, MaintenancePriority } from '@/types/maintenance';
 import MaintenanceCategorySelect from './MaintenanceCategorySelect';
 import MaintenanceTagInput from './MaintenanceTagInput';
 import { toast } from 'react-hot-toast';
@@ -21,9 +21,9 @@ export default function MaintenanceRequestForm({
   const { createRequest } = useMaintenance();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState<'low' | 'medium' | 'high' | 'emergency'>('medium');
+  const [priority, setPriority] = useState<MaintenancePriority>('medium');
   const [category, setCategory] = useState<MaintenanceCategory>('other');
-  const [tags, setTags] = useState<MaintenanceTag[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +42,7 @@ export default function MaintenanceRequestForm({
         category,
         tags,
         images,
+        notes: [],
         tenantId: '', // This will be set by the backend based on the authenticated user
         status: 'pending',
       });
@@ -145,7 +146,7 @@ export default function MaintenanceRequestForm({
         <select
           id="priority"
           value={priority}
-          onChange={(e) => setPriority(e.target.value as any)}
+          onChange={(e) => setPriority(e.target.value as MaintenancePriority)}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         >
           <option value="low">Low</option>

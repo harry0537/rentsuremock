@@ -1,60 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
 import PropertyFilters from '@/components/PropertyFilters';
-import { useProperties } from '@/context/PropertyContext';
-import { Property } from '@/types/property';
-
-interface PropertyFilters {
-  minPrice?: number;
-  maxPrice?: number;
-  bedrooms?: number;
-  propertyType?: string;
-  amenities?: string[];
-  location?: string;
-}
+import { useProperty } from '@/context/PropertyContext';
+import { useEffect } from 'react';
 
 export default function PropertiesPage() {
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<PropertyFilters>({});
-  const { getAllProperties } = useProperties();
+  const { properties, loading, error, filters, setFilters, fetchProperties } = useProperty();
   const router = useRouter();
 
   useEffect(() => {
-    const loadProperties = async () => {
-      try {
-        setLoading(true);
-        const data = await getAllProperties();
-        setProperties(data);
-        setError(null);
-      } catch (err) {
-        setError('Failed to load properties');
-        console.error('Error loading properties:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchProperties();
+  }, [fetchProperties]);
 
-    loadProperties();
-  }, [getAllProperties]);
-
-  const handleFilterChange = (key: string, value: string | number | boolean) => {
-    setFilters((prev: PropertyFilters) => ({ ...prev, [key]: value }));
+  const handleFilterChange = (key: string, value: string | number | boolean | string[]) => {
+    setFilters({ ...filters, [key]: value });
   };
 
   const filteredProperties = properties.filter(property => {
     if (filters.minPrice && property.price < filters.minPrice) return false;
     if (filters.maxPrice && property.price > filters.maxPrice) return false;
     if (filters.bedrooms && property.bedrooms < filters.bedrooms) return false;
-    if (filters.propertyType && property.type !== filters.propertyType) return false;
-    if (filters.location && !property.address.toLowerCase().includes(filters.location.toLowerCase())) return false;
-    if (filters.amenities && filters.amenities.length > 0) {
-      return filters.amenities.every(amenity => property.amenities.includes(amenity));
-    }
+    if (filters.bathrooms && property.bathrooms < filters.bathrooms) return false;
+    if (filters.city && !property.location.toLowerCase().includes(filters.city.toLowerCase())) return false;
+    if (filters.state && !property.location.toLowerCase().includes(filters.state.toLowerCase())) return false;
     return true;
   });
 

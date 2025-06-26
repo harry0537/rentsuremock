@@ -1,10 +1,10 @@
 import { MongoClient } from 'mongodb';
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your Mongo URI to .env.local');
+if (!process.env.MONGODB_URI && process.env.NODE_ENV !== 'development') {
+  console.warn('MongoDB URI not found - some features may not work');
 }
 
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/fallback';
 const options = {};
 
 let client;
@@ -29,7 +29,12 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export async function connectToDatabase() {
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB);
-  return { client, db };
+  try {
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB);
+    return { client, db };
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    throw error;
+  }
 }

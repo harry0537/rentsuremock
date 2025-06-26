@@ -61,7 +61,7 @@ export default function MaintenanceRequestsPage() {
     }
   }, [propertyId, getRequestsByProperty]);
 
-  const handleFilterChange = (newFilters: any) => {
+  const handleFilterChange = (newFilters: Record<string, string>) => {
     setFilters({ ...filters, ...newFilters });
   };
 
@@ -71,10 +71,6 @@ export default function MaintenanceRequestsPage() {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-  };
-
-  const handleRequestClick = (request: MaintenanceRequest) => {
-    setSelectedRequest(request);
   };
 
   const filteredRequests = requests

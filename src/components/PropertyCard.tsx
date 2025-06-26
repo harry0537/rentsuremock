@@ -4,11 +4,18 @@ import { Property } from '@/types/property';
 
 interface PropertyCardProps {
   property: Property;
+  onClick?: () => void;
 }
 
-export default function PropertyCard({ property }: PropertyCardProps) {
+export default function PropertyCard({ property, onClick }: PropertyCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div
+      className={`bg-white rounded-lg shadow-md overflow-hidden cursor-pointer ${onClick ? 'hover:shadow-lg transition-shadow' : ''}`}
+      onClick={onClick}
+      tabIndex={onClick ? 0 : undefined}
+      role={onClick ? 'button' : undefined}
+      style={onClick ? { outline: 'none' } : undefined}
+    >
       <div className="relative h-48">
         <Image
           src={property.images[0] || '/images/placeholder.jpg'}
@@ -29,7 +36,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         </div>
       </div>
       <div className="p-4">
-        <Link href={`/properties/${property.id}`} className="block">
+        <Link href={`/properties/${property._id}`} className="block">
           <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600">
             {property.title}
           </h3>
@@ -76,7 +83,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             )}
           </div>
           <Link
-            href={`/properties/${property.id}`}
+            href={`/properties/${property._id}`}
             className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
           >
             View Details

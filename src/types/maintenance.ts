@@ -1,6 +1,6 @@
 export type MaintenanceStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
 export type MaintenancePriority = 'low' | 'medium' | 'high' | 'emergency';
-export type MaintenanceCategory = 'plumbing' | 'electrical' | 'hvac' | 'structural' | 'appliance' | 'pest_control' | 'other';
+export type MaintenanceCategory = 'plumbing' | 'electrical' | 'hvac' | 'structural' | 'appliance' | 'pest_control' | 'landscaping' | 'security' | 'other';
 
 export interface MaintenanceTag {
   id: string;

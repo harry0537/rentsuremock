@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useMaintenance } from '@/hooks/useMaintenance';
+import { useMaintenance } from '@/context/MaintenanceContext';
 import { MaintenanceRequest } from '@/types/maintenance';
 import {
   ChartBarIcon,

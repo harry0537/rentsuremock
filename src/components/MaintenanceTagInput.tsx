@@ -1,10 +1,9 @@
 import { useState, KeyboardEvent } from 'react';
 import { XMarkIcon } from '@heroicons/react/20/solid';
-import { MaintenanceTag } from '@/types/maintenance';
 
 interface MaintenanceTagInputProps {
-  tags: MaintenanceTag[];
-  onTagsChange: (tags: MaintenanceTag[]) => void;
+  tags: string[];
+  onTagsChange: (tags: string[]) => void;
 }
 
 const TAG_COLORS = [
@@ -24,32 +23,30 @@ export default function MaintenanceTagInput({ tags, onTagsChange }: MaintenanceT
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && inputValue.trim()) {
       e.preventDefault();
-      const newTag: MaintenanceTag = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: inputValue.trim(),
-        color: TAG_COLORS[Math.floor(Math.random() * TAG_COLORS.length)],
-      };
-      onTagsChange([...tags, newTag]);
+      const newTag = inputValue.trim();
+      if (!tags.includes(newTag)) {
+        onTagsChange([...tags, newTag]);
+      }
       setInputValue('');
     }
   };
 
-  const removeTag = (tagId: string) => {
-    onTagsChange(tags.filter((tag) => tag.id !== tagId));
+  const removeTag = (tagToRemove: string) => {
+    onTagsChange(tags.filter((tag) => tag !== tagToRemove));
   };
 
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
+        {tags.map((tag, index) => (
           <span
-            key={tag.id}
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${tag.color}`}
+            key={tag}
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${TAG_COLORS[index % TAG_COLORS.length]}`}
           >
-            {tag.name}
+            {tag}
             <button
               type="button"
-              onClick={() => removeTag(tag.id)}
+              onClick={() => removeTag(tag)}
               className="ml-1 inline-flex items-center justify-center h-4 w-4 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <XMarkIcon className="h-3 w-3" aria-hidden="true" />

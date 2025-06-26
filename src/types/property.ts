@@ -18,6 +18,20 @@ export interface Property {
   amenities: string[];
   createdAt: Date;
   updatedAt: Date;
+  status: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
+  features: {
+    bedrooms: number;
+    bathrooms: number;
+    squareFeet: number;
+    parking?: boolean;
+    petsAllowed?: boolean;
+  };
 }
 
 export interface PropertyFilters {

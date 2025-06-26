@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useMaintenance } from '@/context/MaintenanceContext';
-import { MaintenanceRequest } from '@/types/maintenance';
+import { MaintenanceRequest, MaintenanceNote, MaintenanceStatus } from '@/types/maintenance';
 import NotificationToast from './NotificationToast';
 import Image from 'next/image';
 
@@ -16,7 +16,7 @@ export default function MaintenanceRequestDetails({
   onClose,
 }: MaintenanceRequestDetailsProps) {
   const { updateRequest, addNote, getNotes } = useMaintenance();
-  const [notes, setNotes] = useState<string[]>([]);
+  const [notes, setNotes] = useState<MaintenanceNote[]>([]);
   const [newNote, setNewNote] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState<{
@@ -59,7 +59,7 @@ export default function MaintenanceRequestDetails({
   const handleStatusChange = async (newStatus: string) => {
     try {
       setIsSubmitting(true);
-      await updateRequest(request.id, { status: newStatus });
+      await updateRequest(request.id, { status: newStatus as MaintenanceStatus });
       showNotification(
         'success',
         'Status Updated',
@@ -80,7 +80,11 @@ export default function MaintenanceRequestDetails({
 
     try {
       setIsSubmitting(true);
-      await addNote(request.id, newNote);
+      await addNote(request.id, {
+        requestId: request.id,
+        userId: 'current-user', // TODO: Get actual user ID
+        content: newNote,
+      });
       setNewNote('');
       await loadNotes();
       showNotification('success', 'Note Added', 'Your note has been added');
@@ -199,7 +203,7 @@ export default function MaintenanceRequestDetails({
                 key={index}
                 className="bg-gray-50 rounded-lg p-4 text-sm text-gray-500"
               >
-                {note}
+                {note.content}
               </div>
             ))}
           </div>
