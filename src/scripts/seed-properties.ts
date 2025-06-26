@@ -2,7 +2,43 @@ import { MongoClient, ObjectId } from 'mongodb';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://harinderhome:Harry%400537@cluster0.yk4m5zn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
-const sampleProperties = [
+interface PropertyDocument {
+  _id: ObjectId;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
+  images: string[];
+  verified: boolean;
+  status: string;
+  landlord: {
+    name: string;
+    verified: boolean;
+    rating: number;
+    reviews: number;
+  };
+  amenities: string[];
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
+  features: {
+    bedrooms: number;
+    bathrooms: number;
+    squareFeet: number;
+    parking: boolean;
+    petsAllowed: boolean;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const sampleProperties: PropertyDocument[] = [
   {
     _id: new ObjectId('507f1f77bcf86cd799439011'),
     title: 'Modern Downtown Apartment',
@@ -91,14 +127,14 @@ async function seedProperties() {
     console.log('Connected to MongoDB');
     
     const db = client.db('rentsure');
-    const collection = db.collection('properties');
+    const collection = db.collection<PropertyDocument>('properties');
     
     // Clear existing properties
     await collection.deleteMany({});
     console.log('Cleared existing properties');
     
     // Insert sample properties
-    await collection.insertMany(sampleProperties as any);
+    await collection.insertMany(sampleProperties);
     console.log('Inserted sample properties successfully!');
     
     // Verify insertion
