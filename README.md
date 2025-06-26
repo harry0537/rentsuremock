@@ -62,7 +62,7 @@ RentSure is a modern, cloud-based property management platform that streamlines 
 3. Set up environment variables:
    Create a `.env.local` file with:
    ```
-   MONGODB_URI=your_mongodb_uri
+   MONGODB_URI = mongodb+srv://harinderhome:Harry%400537@cluster0.yk4m5zn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
    NEXTAUTH_SECRET=your_nextauth_secret
    CLOUDINARY_CLOUD_NAME=your_cloudinary_name
    CLOUDINARY_API_KEY=your_cloudinary_key
