@@ -23,7 +23,7 @@
     "autoprefixer": "^10.4.17",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.6.1",
-    "framer-motion": "^12.19.1",
+    "framer-motion": "^12.19.2",
     "glob": "^11.0.2",
     "inflight": "^1.0.6",
     "mongodb": "^6.3.0",

@@ -1,5 +1,7 @@
+'use client';
+
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion } from '@/lib/motion';
 import Button from '@/components/ui/Button';
 import MobileSearchBar from '@/components/MobileSearchBar';
 import {
@@ -80,17 +82,14 @@ export default function NotFound() {
             <div className="hidden md:block mb-6">
               <div className="relative max-w-md mx-auto">
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search properties, neighborhoods..."
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      const query = (e.target as HTMLInputElement).value;
-                      window.location.href = `/listings?q=${encodeURIComponent(query)}`;
-                    }
-                  }}
-                />
+                <Link href="/listings">
+                  <input
+                    type="text"
+                    placeholder="Search properties, neighborhoods..."
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-base cursor-pointer"
+                    readOnly
+                  />
+                </Link>
               </div>
             </div>
 
@@ -124,24 +123,26 @@ export default function NotFound() {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              href="/listings"
-              size="lg"
-              className="flex items-center justify-center"
-            >
-              <MagnifyingGlassIcon className="w-5 h-5 mr-2" />
-              Browse All Properties
-            </Button>
+            <Link href="/listings">
+              <Button
+                size="lg"
+                className="flex items-center justify-center"
+              >
+                <MagnifyingGlassIcon className="w-5 h-5 mr-2" />
+                Browse All Properties
+              </Button>
+            </Link>
             
-            <Button
-              href="/"
-              variant="outline"
-              size="lg"
-              className="flex items-center justify-center"
-            >
-              <HomeIcon className="w-5 h-5 mr-2" />
-              Go to Homepage
-            </Button>
+            <Link href="/">
+              <Button
+                variant="outline"
+                size="lg"
+                className="flex items-center justify-center"
+              >
+                <HomeIcon className="w-5 h-5 mr-2" />
+                Go to Homepage
+              </Button>
+            </Link>
           </div>
         </motion.div>
 
@@ -159,22 +160,20 @@ export default function NotFound() {
             Our support team is here to help you find the perfect rental property.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              href="/contact"
-              variant="outline"
-              size="sm"
-              className="flex items-center justify-center"
-            >
-              <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />
-              Contact Support
-            </Button>
-            <button
-              onClick={() => window.history.back()}
-              className="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
-            >
+            <Link href="/contact">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center justify-center"
+              >
+                <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />
+                Contact Support
+              </Button>
+            </Link>
+            <Link href="/" className="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors">
               <ArrowLeftIcon className="w-4 h-4 mr-2" />
               Go Back
-            </button>
+            </Link>
           </div>
         </motion.div>
 

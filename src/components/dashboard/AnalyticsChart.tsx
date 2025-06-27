@@ -4,8 +4,8 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
   ChartBarIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
   CalendarIcon
 } from '@heroicons/react/24/outline';
 
@@ -137,7 +137,7 @@ export default function AnalyticsChart({ properties }: AnalyticsChartProps) {
                 {formatValue(Math.round(avgValue))}
               </p>
             </div>
-            <TrendingUpIcon className="h-8 w-8 text-green-500" />
+            <ArrowTrendingUpIcon className="h-8 w-8 text-green-500" />
           </div>
         </div>
         
@@ -149,7 +149,7 @@ export default function AnalyticsChart({ properties }: AnalyticsChartProps) {
                 {formatValue(maxValue)}
               </p>
             </div>
-            <TrendingUpIcon className="h-8 w-8 text-blue-500" />
+            <ArrowTrendingUpIcon className="h-8 w-8 text-blue-500" />
           </div>
         </div>
         
@@ -161,7 +161,7 @@ export default function AnalyticsChart({ properties }: AnalyticsChartProps) {
                 {formatValue(minValue)}
               </p>
             </div>
-            <TrendingDownIcon className="h-8 w-8 text-gray-400" />
+            <ArrowTrendingDownIcon className="h-8 w-8 text-gray-400" />
           </div>
         </div>
       </div>

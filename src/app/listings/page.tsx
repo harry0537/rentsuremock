@@ -5,7 +5,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from '@/lib/motion';
 import { Toaster } from 'react-hot-toast';
 import SearchBar from '@/components/SearchBar';
 import PropertyFilters from '@/components/PropertyFilters';
@@ -454,6 +454,7 @@ function PropertyCard({ property, viewType }: { property: Property; viewType: 'g
               </div>
             )}
           </div>
+        </div>
         </Link>
       </div>
     );
@@ -537,6 +538,7 @@ function PropertyCard({ property, viewType }: { property: Property; viewType: 'g
           </div>
         )}
       </div>
+      </Link>
     </div>
   );
 }

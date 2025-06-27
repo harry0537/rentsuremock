@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Send email notification
-    await sendEmail(emailContent);
+    await sendEmail(emailContent.to, emailContent.subject, emailContent.html);
 
     // Send confirmation email to the inquirer
     const confirmationEmail = {
@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
       `
     };
 
-    await sendEmail(confirmationEmail);
+    await sendEmail(confirmationEmail.to, confirmationEmail.subject, confirmationEmail.html);
 
     // In a real application, save the inquiry to database
     // await saveInquiry({

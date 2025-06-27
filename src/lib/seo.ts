@@ -6,7 +6,7 @@ export interface SEOProps {
   keywords?: string[];
   image?: string;
   url?: string;
-  type?: 'website' | 'article' | 'property';
+  type?: 'website' | 'article';
   publishedTime?: string;
   modifiedTime?: string;
   locale?: string;

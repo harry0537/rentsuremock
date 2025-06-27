@@ -141,9 +141,11 @@ export default function Navbar() {
                 >
                   Sign In
                 </Link>
-                <Button size="sm" href="/auth/signup">
-                  Sign Up
-                </Button>
+                <Link href="/auth/signup">
+                  <Button size="sm">
+                    Sign Up
+                  </Button>
+                </Link>
               </div>
             )}
           </div>

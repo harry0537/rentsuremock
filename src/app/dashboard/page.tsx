@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import LandlordDashboard from '@/components/LandlordDashboard';
 import Button from '@/components/ui/Button';
-import { motion } from 'framer-motion';
+import { motion } from '@/lib/motion';
 import {
   UserIcon,
   HomeIcon,
@@ -57,7 +57,7 @@ function DashboardContent() {
             Welcome back, {user?.name}!
           </h1>
           <p className="text-gray-600">
-            {user?.role === 'student' 
+            {user?.role === 'tenant' 
               ? 'Find your perfect place to study and live' 
               : 'Manage your rentals and find great properties'
             }
@@ -153,10 +153,10 @@ function DashboardContent() {
           </div>
         </div>
 
-        {/* Tips for Students */}
-        {user?.role === 'student' && (
+        {/* Tips for Tenants */}
+        {user?.role === 'tenant' && (
           <div className="mt-8 bg-blue-50 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-blue-900 mb-4">Tips for Students</h2>
+            <h2 className="text-xl font-semibold text-blue-900 mb-4">Rental Tips</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-white rounded-lg p-4">
                 <h3 className="font-medium text-gray-900 mb-2">Budget Planning</h3>
@@ -187,7 +187,7 @@ function DashboardContent() {
         )}
 
         {/* Role Upgrade Option */}
-        {user?.role !== 'landlord' && (
+        {user?.role === 'tenant' && (
           <div className="mt-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6">
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div>

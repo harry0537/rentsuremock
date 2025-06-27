@@ -4,6 +4,22 @@ if (process.env.SENDGRID_API_KEY) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 }
 
+export const sendEmail = async (to: string, subject: string, html: string, from?: string) => {
+  const msg = {
+    to,
+    from: from || process.env.SENDGRID_FROM_EMAIL || 'noreply@rentsure.com',
+    subject,
+    html,
+  };
+
+  try {
+    await sgMail.send(msg);
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw error;
+  }
+};
+
 export const sendMaintenanceNotification = async (
   to: string,
   subject: string,

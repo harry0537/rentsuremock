@@ -85,7 +85,7 @@ export const propertySchema = z.object({
       return selectedDate >= today;
     }, 'Available date cannot be in the past'),
     
-  furnished: z.boolean().default(false),
+  furnished: z.boolean(),
   
   petPolicy: z.enum(['allowed', 'not-allowed', 'cats-only', 'dogs-only', 'case-by-case'], {
     required_error: 'Please select a pet policy',
@@ -96,17 +96,17 @@ export const propertySchema = z.object({
   }),
   
   utilities: z.object({
-    electricity: z.boolean().default(false),
-    water: z.boolean().default(false),
-    gas: z.boolean().default(false),
-    internet: z.boolean().default(false),
-    cable: z.boolean().default(false),
-    trash: z.boolean().default(false),
-  }).optional(),
+    electricity: z.boolean(),
+    water: z.boolean(),
+    gas: z.boolean(),
+    internet: z.boolean(),
+    cable: z.boolean(),
+    trash: z.boolean(),
+  }),
   
-  amenities: z.array(z.string()).default([]),
+  amenities: z.array(z.string()),
   
-  nearbyFeatures: z.array(z.string()).default([]),
+  nearbyFeatures: z.array(z.string()),
   
   contactPhone: z
     .string()
@@ -150,12 +150,11 @@ export const propertySchema = z.object({
     .number()
     .int('Lease term must be a whole number')
     .min(1, 'Minimum lease term is 1 month')
-    .max(60, 'Maximum lease term is 60 months')
-    .default(12),
+    .max(60, 'Maximum lease term is 60 months'),
     
   status: z.enum(['draft', 'active', 'pending', 'rented', 'maintenance'], {
     required_error: 'Please select a property status',
-  }).default('draft'),
+  }),
 });
 
 // Type inference
@@ -236,7 +235,7 @@ export const contactFormSchema = z.object({
   
   tourTime: z.string().optional(),
   
-  preferredContact: z.enum(['email', 'phone', 'text']).default('email'),
+  preferredContact: z.enum(['email', 'phone', 'text']),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>; 

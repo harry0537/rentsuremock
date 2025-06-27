@@ -1,3 +1,5 @@
+'use client';
+
 import { FaPaperPlane, FaUser, FaCheck } from 'react-icons/fa'
 
 // Mock data for conversations

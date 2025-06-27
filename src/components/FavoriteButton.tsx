@@ -24,7 +24,7 @@ export default function FavoriteButton({
   showText = false
 }: FavoriteButtonProps) {
   const { user } = useAuth();
-  const { isFavorite, addToFavorites, removeFromFavorites, loading } = useFavorites();
+  const { isFavorite, addFavorite, removeFavorite, loading } = useFavorites();
   const [isAnimating, setIsAnimating] = useState(false);
   const favorite = isFavorite(propertyId);
 
@@ -41,9 +41,9 @@ export default function FavoriteButton({
     
     try {
       if (favorite) {
-        await removeFromFavorites(propertyId);
+        await removeFavorite(propertyId);
       } else {
-        await addToFavorites(propertyId);
+        await addFavorite(propertyId);
       }
     } finally {
       setTimeout(() => setIsAnimating(false), 300);
