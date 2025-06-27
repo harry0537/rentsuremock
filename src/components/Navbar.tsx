@@ -31,6 +31,11 @@ export default function Navbar() {
             <Link href="/listings" className="text-gray-600 hover:text-primary-600">
               Browse Rentals
             </Link>
+            {user && (
+              <Link href="/favorites" className="text-gray-600 hover:text-primary-600">
+                Favorites
+              </Link>
+            )}
             {user?.role === 'landlord' && (
               <Link href="/listings/new" className="text-gray-600 hover:text-primary-600">
                 List Property

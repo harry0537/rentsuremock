@@ -11,6 +11,7 @@ import SearchBar from '@/components/SearchBar';
 import PropertyFilters from '@/components/PropertyFilters';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
 import Button from '@/components/ui/Button';
+import FavoriteButton from '@/components/FavoriteButton';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { showToast } from '@/lib/toast';
 import { 
@@ -402,11 +403,14 @@ export default function ListingsPage() {
 function PropertyCard({ property, viewType }: { property: Property; viewType: 'grid' | 'list' }) {
   if (viewType === 'list') {
     return (
-      <Link
-        href={`/listings/${property._id}`}
-        className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex"
-      >
-        <div className="relative w-80 h-48 flex-shrink-0">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex relative">
+        {/* Favorite Button */}
+        <div className="absolute top-3 right-3 z-10">
+          <FavoriteButton propertyId={property._id} />
+        </div>
+        
+        <Link href={`/listings/${property._id}`} className="flex flex-1">
+          <div className="relative w-80 h-48 flex-shrink-0">
           {property.images && property.images.length > 0 ? (
             <Image
               src={property.images[0]}
@@ -450,16 +454,19 @@ function PropertyCard({ property, viewType }: { property: Property; viewType: 'g
               </div>
             )}
           </div>
-        </div>
-      </Link>
+        </Link>
+      </div>
     );
   }
 
   return (
-    <Link
-      href={`/listings/${property._id}`}
-      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-    >
+    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow relative">
+      {/* Favorite Button */}
+      <div className="absolute top-3 right-3 z-10">
+        <FavoriteButton propertyId={property._id} />
+      </div>
+
+      <Link href={`/listings/${property._id}`}>
       <div className="relative h-48">
         {property.images && property.images.length > 0 ? (
           <Image
@@ -530,6 +537,6 @@ function PropertyCard({ property, viewType }: { property: Property; viewType: 'g
           </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 }
