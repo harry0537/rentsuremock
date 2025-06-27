@@ -5,6 +5,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import { FavoritesProvider } from '@/context/FavoritesContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import PerformanceMonitor from './PerformanceMonitor';
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -21,6 +22,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
               {children}
             </main>
             <Footer />
+            <PerformanceMonitor />
           </div>
         </FavoritesProvider>
       </PropertyProvider>
