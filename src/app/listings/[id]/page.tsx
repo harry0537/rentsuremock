@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Metadata } from 'next';
 
 interface Property {
   _id: string;
@@ -40,16 +39,6 @@ interface Property {
   };
   createdAt: string;
   updatedAt: string;
-}
-
-export async function generateMetadata(
-  { params }: { params: Promise<{ id: string }> }
-): Promise<Metadata> {
-  const { id } = await params;
-  return {
-    title: `Listing ${id} | Rentsure`,
-    description: 'View detailed information about this property.',
-  };
 }
 
 export default function ListingDetailPage() {

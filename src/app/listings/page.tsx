@@ -3,7 +3,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -26,11 +25,6 @@ interface Property {
   };
   amenities: string[];
 }
-
-export const metadata: Metadata = {
-  title: 'Listings | Rentsure',
-  description: 'Browse available properties.',
-};
 
 export default function ListingsPage() {
   const [properties, setProperties] = useState<Property[]>([]);
